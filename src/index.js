@@ -1,7 +1,7 @@
 /*
     downwards Data Flow : the most parent components shd reponse to fetch the data
 */
-
+import _ from 'lodash';
 import React ,{ Component }from 'react';
 import ReactDOM from 'react-dom';           //library no need to write directory
 import SearchBar from './components/search_bar';
@@ -30,17 +30,25 @@ class App extends Component {
           selectedVideo:null
         };
 
-        YTSearch({key: API_KEY, term:'surfboards'}, (videos) => {
-            this.setState({
-              videos:videos,
-              selectedVideo:videos[0]});
-            // =this.setState({videos:videos})    only work when variable name is the same
-        });
+        this.videoSearch('surfboards');
+
+
+    }
+
+    videoSearch(term){
+      YTSearch({key: API_KEY, term: term}, (videos) => {
+          this.setState({
+            videos:videos,
+            selectedVideo:videos[0]}
+          );
+          // =this.setState({videos:videos})    only work when variable name is the same
+      });
     }
     render(){
+      const videoSearch=_.debounce((term)=> {this.videoSearch(term)},300);
         return(
         <div>
-            <SearchBar />
+            <SearchBar onSearchTermChange={videoSearch}/>
             <VideoDetail video={this.state.selectedVideo}/>
             <VideoList
             onVideoSelect={selectedVideo=>this.setState({selectedVideo})}   //callback !important
