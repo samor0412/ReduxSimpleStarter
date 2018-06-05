@@ -1,15 +1,44 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+/*
+    downwards Data Flow : the most parent components shd reponse to fetch the data
+*/
 
-import App from './components/app';
-import reducers from './reducers';
+import React ,{ Component }from 'react';
+import ReactDOM from 'react-dom';           //library no need to write directory
+import SearchBar from './components/search_bar';
+import YTSearch from 'youtube-api-search';
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+const API_KEY='AIzaSyCeRjZegcQAhUCAVBDsCVlmcaZ154P62oU'; //youtube api
 
-ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
-    <App />
-  </Provider>
-  , document.querySelector('.container'));
+
+
+//Create Component,it will produce some HTML
+
+// const App = ()=>{        //const = final value of var , '()=>' replaces function()
+//     return <div>
+//         <SearchBar />
+//     </div>;
+// }
+
+class App extends Component {
+    constructor(props){
+        super(props);
+
+        this.state ={ videos:[] };
+
+        YTSearch({key: API_KEY, term:'surfboards'}, (videos) => {
+            this.setState({videos});
+            // =this.setState({videos:videos})    only work when variable name is the same
+        });
+    }
+    render(){
+        return(
+        <div>
+            <SearchBar />
+        </div>
+        );
+    }
+}
+
+//Take this component's genereated HTML and put it on the page(int the DOM)
+
+ReactDOM.render(<App />, document.querySelector('.container'));
