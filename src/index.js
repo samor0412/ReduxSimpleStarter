@@ -6,6 +6,7 @@ import React ,{ Component }from 'react';
 import ReactDOM from 'react-dom';           //library no need to write directory
 import SearchBar from './components/search_bar';
 import YTSearch from 'youtube-api-search';
+import VideoList from './components/video_list';
 
 const API_KEY='AIzaSyCeRjZegcQAhUCAVBDsCVlmcaZ154P62oU'; //youtube api
 
@@ -34,6 +35,7 @@ class App extends Component {
         return(
         <div>
             <SearchBar />
+            <VideoList videos={this.state.videos}/>
         </div>
         );
     }
